@@ -1,0 +1,33 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #303030;
+  
+  .welcome-page {
+    display: flex;
+    justify-content: center;
+    
+    .main-logo{
+      position: absolute;
+      width: 500px;
+    }
+
+    .card {
+      margin-top: 200px;
+      margin-bottom: 0;
+      width: 400px;
+      height: 400px;
+      border-radius: 30px;
+
+
+      .type-logo{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+  }
+  }
+}
