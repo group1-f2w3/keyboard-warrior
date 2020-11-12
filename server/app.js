@@ -26,7 +26,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sendAtteck', (attack) => {
-    //
+    playerStatus.forEach((elemen) => {
+      if (elemen.username !== attack.username) {
+        elemen.hp -= 10;
+      }
+    });
+
+    io.emit('sendAttack', playerStatus);
   });
 });
 

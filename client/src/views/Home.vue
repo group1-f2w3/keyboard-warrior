@@ -20,13 +20,20 @@ export default {
   },
   methods: {
     sendAttack () {
-      this.$socket.emit('sendAttack', this.attack)
+      let attacks = {
+        username: localStorage.getItem('username')
+        attack: this.attack
+      }
+      this.$socket.emit('sendAttack', attacks)
       this.attack = ''
     }
   },
   sockets: {
     userLogin (playerStatus) {
       this.username = localStorage.getItem('username')
+      this.playerStatus = playerStatus
+    },
+    sendAttack (playerStatus) {
       this.playerStatus = playerStatus
     }
   },
