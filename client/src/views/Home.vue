@@ -11,6 +11,16 @@ import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
+  data () {
+    return {
+      playerStatus = []
+    }
+  },
+  sockets: {
+    userLogin (playerStatus) {
+      this.playerStatus = playerStatus
+    }
+  },
   components: {
     HelloWorld
   }
