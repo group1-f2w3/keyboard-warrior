@@ -22,12 +22,16 @@ body {
       height: 400px;
       border-radius: 30px;
 
+      input {
+        border: 1px solid #303030
+      }
+
 
       .type-logo{
         display: flex;
         align-items: center;
         justify-content: center;
+     }
     }
-  }
   }
 }

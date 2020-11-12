@@ -21,6 +21,9 @@ body .welcome-page .card {
   height: 400px;
   border-radius: 30px;
 }
+body .welcome-page .card input {
+  border: 1px solid #303030;
+}
 body .welcome-page .card .type-logo {
   display: flex;
   align-items: center;
