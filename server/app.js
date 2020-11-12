@@ -24,6 +24,10 @@ io.on('connection', (socket) => {
 
     io.emit('userLogin', playerStatus);
   });
+
+  socket.on('sendAtteck', (attack) => {
+    //
+  });
 });
 
 http.listen(port, () => {
