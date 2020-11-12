@@ -4,7 +4,7 @@
       <div class="col-md-6 mx-auto">
         <p class="lead">Type The Given Word Within
           <span class="text-success" id="seconds">5</span> Seconds:</p>
-        <h2 class="display-2 mb-5" id="current-word">hello</h2>
+        <h2 class="display-2 mb-5" id="current-word">{{this.$store.state.currentWord}}</h2>
         <input type="text" class="form-control form-control-lg" placeholder="Start typing..." id="word-input" autofocus>
         <h4 class="mt-3" id="message"></h4>
 
@@ -53,5 +53,6 @@ export default {
 </script>
 
 <style>
+
 
 </style>
