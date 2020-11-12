@@ -5,7 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentWord:[]
+    currentWord:[],
+    score:0,
+    isPlaying:false
   },
   mutations: {
     SET_WORD(state,dataWord){
@@ -242,7 +244,8 @@ export default new Vuex.Store({
       .catch(err=>{
         console.log(err)
       })
-    }
+    },
+    
   },
   modules: {
   }

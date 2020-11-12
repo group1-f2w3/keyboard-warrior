@@ -6,7 +6,7 @@
           <span class="text-success" id="seconds">5</span> Seconds:</p>
         <h2 class="display-2 mb-5" id="current-word">{{$store.state.currentWord}}</h2>
 
-        <input type="text" class="form-control form-control-lg" placeholder="Start typing..." id="word-input" autofocus>
+        <input type="text" v-model="typing" class="form-control form-control-lg" placeholder="Start typing..." id="word-input" autofocus>
         <h4 class="mt-3" id="message"></h4>
 
         <!-- Time & Score Columns -->
@@ -47,6 +47,11 @@
 <script>
 export default {
   name:'Fight',
+  data(){
+    return{
+      typing:''
+    }
+  },
   created(){
     this.$store.dispatch('fetchWords')
   }
