@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Typing from '../components/Typing.vue'
+import Welcome from '../views/Welcome.vue'
+import Arena from '../views/Arena.vue'
+import Result from '../views/Result.vue'
 
 Vue.use(VueRouter)
 
@@ -27,7 +30,8 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Fight.vue')
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Fight.vue'),
   },
   {
     path: '/',
@@ -38,6 +42,22 @@ const routes = [
     path: '/typing',
     name: 'Typing',
     component: Typing,
+  },
+
+  {
+    path: '/welcome',
+    name: 'Welcome',
+    component: Welcome,
+  },
+  {
+    path: '/arena',
+    name: 'Arena',
+    component: Arena,
+  },
+  {
+    path: '/result',
+    name: 'Result',
+    component: Result,
   },
 ]
 
