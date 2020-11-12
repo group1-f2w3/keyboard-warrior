@@ -87,7 +87,7 @@ body .winner-page .card-winner .btn-section {
   margin-top: 100px;
 }
 body .winner-page .card-winner .btn-section .btn {
-  width: 100px;
+  width: 120px;
 }
 body .winner-page .card-winner .btn-section .btn-danger {
   margin-left: 10px;
@@ -111,7 +111,7 @@ body .loser-page .card-loser .btn-section {
   margin-top: 100px;
 }
 body .loser-page .card-loser .btn-section .btn {
-  width: 100px;
+  width: 120px;
 }
 body .loser-page .card-loser .btn-section .btn-danger {
   margin-left: 10px;

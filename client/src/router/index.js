@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Welcome from '../views/Welcome.vue'
+import Arena from '../views/Arena.vue'
+import Result from '../views/Result.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +26,21 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/welcome',
+    name: 'Welcome',
+    component: Welcome
+  },
+  {
+    path: '/arena',
+    name: 'Arena',
+    component: Arena
+  },
+  {
+    path: '/result',
+    name: 'Result',
+    component: Result
   }
 ]
 
