@@ -13,7 +13,7 @@
     name: 'Home',
     data() {
       return {
-        playerStatus: [],
+        playerStatus: []
       }
     },
     sockets: {
