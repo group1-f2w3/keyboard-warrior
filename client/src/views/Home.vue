@@ -13,11 +13,20 @@ export default {
   name: 'Home',
   data () {
     return {
-      playerStatus = []
+      playerStatus: [],
+      username: '',
+      attack: ''
+    }
+  },
+  methods: {
+    sendAttack () {
+      this.$socket.emit('sendAttack', this.attack)
+      this.attack = ''
     }
   },
   sockets: {
     userLogin (playerStatus) {
+      this.username = localStorage.getItem('username')
       this.playerStatus = playerStatus
     }
   },
