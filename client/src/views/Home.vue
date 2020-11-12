@@ -1,13 +1,14 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Typing />
   </div>
 </template>
 
 <script>
   // @ is an alias to /src
   import HelloWorld from '@/components/HelloWorld.vue'
+  import Typing from '@/components/Typing.vue'
 
   export default {
     name: 'Home',
@@ -23,6 +24,7 @@
     },
     components: {
       HelloWorld,
+      Typing,
     },
   }
 </script>
