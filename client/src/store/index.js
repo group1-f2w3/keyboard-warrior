@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentWord:''
+    currentWord:[]
   },
   mutations: {
     SET_WORD(state,dataWord){
@@ -237,8 +237,7 @@ export default new Vuex.Store({
       ]
       const randomWordsIndex = Math.floor(Math.random() * words.length)
       let data = words[randomWordsIndex]
-      console.log(data)
-      context.commit('SET_WORD',data)
+      context.commit('SET_WORD',words)
     }
   },
   modules: {
