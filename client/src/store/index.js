@@ -15,7 +15,7 @@ export default new Vuex.Store({
   actions: {
     fetchWords(context,payload){
       //data words apakah dipanggil axios aja nantinya??
-      const words = [
+      let words = Promise.resolve([
         'abap',
         'able',
         'abset',
@@ -234,10 +234,14 @@ export default new Vuex.Store({
         'zzt',
         'zsh',
         'zonnon'
-      ]
-      const randomWordsIndex = Math.floor(Math.random() * words.length)
-      let data = words[randomWordsIndex]
-      context.commit('SET_WORD',words)
+      ])
+      words.then(data =>{
+        const randomWordsIndex = Math.floor(Math.random() * data.length)
+        context.commit('SET_WORD',data[randomWordsIndex])
+      })
+      .catch(err=>{
+        console.log(err)
+      })
     }
   },
   modules: {
