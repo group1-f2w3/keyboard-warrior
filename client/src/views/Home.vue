@@ -22,7 +22,7 @@ export default {
   methods: {
     sendAttack () {
       let attacks = {
-        username: localStorage.getItem('username')
+        username: localStorage.getItem('username'),
         attack: this.attack
       }
       this.$socket.emit('sendAttack', attacks)
