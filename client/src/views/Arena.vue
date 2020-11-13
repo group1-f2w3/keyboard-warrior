@@ -1,23 +1,16 @@
 <template>
-  <section class="arena-page">
+  <section class="arena-page" >
       <div class="card card-arena">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <div v-for="(user,i) in onlineUsers" :key="i">
-                <h3>{{user.username}}</h3> 
-        
-                <div id="myProgress1">
-                  <div id="myBar1">{{user.hp}}</div>
-                </div>
+        <div class="container" >
+          <div class="row" >
+         
+            <div class="col" v-for="(user,i) in onlineUsers" :key="i">
+                <h3>{{user.username}}</h3>
+              <div>
+                <div id="myBar1">{{sisaHp}}</div>
               </div>
             </div>
-            <div class="col">
-              <h3>{{user}}</h3>
-              <div id="myProgress2">
-                <div id="myBar2"></div>
-              </div>
-            </div>
+
           </div>
           <div class="row">
             <!-- Buat characterr -->
@@ -43,7 +36,11 @@ export default {
       typing:'',
       damage:0,
       onlineUsers:[],
-      playerStatus:[]
+      username:'',
+      hp:'',
+      damages:[],
+      healthbar:100,
+      sisaHp:100
 
     }
   },
@@ -52,18 +49,40 @@ export default {
       if(this.typing == this.$store.state.currentWord){
         this.$store.dispatch('fetchWords')
         this.typing = ''
-        this.damage = this.$store.state.currentWord.length
-        this.$socket.emit('sendAttack',{damage:this.damage})
+        this.damage = +this.$store.state.currentWord.length
+
+        let dps ={
+          username:localStorage.getItem('username'),
+          damage:+this.damage
+        }
+        this.$socket.emit('sendAttack',dps)
       }else{
         this.typing =''
       }
     },
   },
   sockets:{
-      userLogin(onlineUsers){
-        console.log(onlineUsers)
-        this.onlineUsers = onlineUsers
- 
+      userLogin(playerStatus){
+        this.username = localStorage.getItem('username')
+        this.hp = localStorage.getItem('hp')
+        this.onlineUsers = playerStatus
+      },
+      sendAttack(damages){
+        this.damages=damages
+        let sender
+        let hit = 0
+        for(let i = 0 ; i<this.damages.length; i++){
+          hit = Number(this.damages[this.damages.length-1].damage)
+          sender = this.damages[i].username
+        }
+        let healthbar= localStorage.getItem('hp')
+        if(sender !== this.username){
+          healthbar -= hit
+        }
+        localStorage.setItem('hp',healthbar)
+        this.sisaHp = localStorage.getItem('hp')
+
+        console.log(hit,healthbar,'tes client')
       }
     },
   created(){

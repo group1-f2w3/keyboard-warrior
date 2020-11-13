@@ -13,19 +13,19 @@ app.use(express.urlencoded({ extended: false }))
 let rooms = []
 let onlineUsers = []
 let playerStatus = []
-
+let damages = []
 io.on('connection', (socket) => {
   console.log('a user connected')
 
   //user login
-  socket.on('userLogin', (username) => {
-    // playerStatus.push({
-    //   username: username,
-    //   hp: 100
-    // });
-    // io.emit('userLogin', playerStatus);
-    socket.emit('getRooms', rooms)
-  })
+  // socket.on('userLogin', (username) => {
+  //   // playerStatus.push({
+  //   //   username: username,
+  //   //   hp: 100
+  //   // });
+  //   // io.emit('userLogin', playerStatus);
+  //   socket.emit('getRooms', rooms)
+  // })
 
   socket.on('getRooms', () => {
     socket.emit('getRooms', rooms)
@@ -54,16 +54,16 @@ io.on('connection', (socket) => {
   //   io.emit('userLogin', {onlineUsers,playerStatus});
   // });
 
-  socket.on('sendAttack', ({ attack, damage }) => {
-    playerStatus.forEach((elemen) => {
-      if (elemen.username !== attack.username) {
-        //memberikan damage kepada lawan
-        elemen.hp -= damage
-      }
-    })
-    console.log(damage, 'server')
-    io.emit('sendAttack', playerStatus)
-  })
+  // socket.on('sendAttack', ({ attack, damage }) => {
+  //   playerStatus.forEach((elemen) => {
+  //     if (elemen.username !== attack.username) {
+  //       //memberikan damage kepada lawan
+  //       elemen.hp -= damage
+  //     }
+  //   })
+  //   console.log(damage, 'server')
+  //   io.emit('sendAttack', playerStatus)
+  // })
 
   socket.on('joinRoom', (data) => {
     socket.join(data.roomName, () => {
@@ -80,25 +80,19 @@ io.on('connection', (socket) => {
     socket.broadcast.to(roomName).emit('startGame')
     //
   })
+
+  socket.on('userLogin', ({ username }) => {
+    playerStatus.push({ username, hp: 100 })
+
+    //broadcasting playerinfo
+    io.emit('userLogin', playerStatus)
+  })
+
+  socket.on('sendAttack', (dps) => {
+    damages.push(dps)
+    io.emit('sendAttack', damages)
+  })
 })
-
-//   socket.on('userLogin', ({username}) => {
-//     onlineUsers.push({username,hp:100})
-//     console.log(username)
-//     //broadcasting playerinfo
-//     io.emit('userLogin', onlineUsers);
-//   });
-
-//   socket.on('sendAttack', ({attack,damage}) => {
-//     playerStatus.forEach((elemen) => {
-//       // if (elemen.username !== attack.username) {
-//       //   //memberikan damage kepada lawan
-//       //   elemen.hp -= damage;
-//       // }
-//     });
-//     io.emit('sendAttack', playerStatus);
-//   });
-// });
 console.log(playerStatus)
 http.listen(port, () => {
   console.log(`listen on http://localhost:${port}`)
