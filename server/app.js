@@ -11,6 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 let rooms = []
+let onlineUsers = []
 let playerStatus = []
 
 io.on('connection', (socket) => {
@@ -37,6 +38,12 @@ io.on('connection', (socket) => {
     // Kirimkan data rooms terbaru ke semua  client
     io.emit('updated-rooms', rooms)
   })
+  // socket.on('userLogin', ({username,hp}) => {
+  //   playerStatus.push(hp)
+  //   onlineUsers.push(username)
+  //   //broadcasting playerinfo
+  //   io.emit('userLogin', {onlineUsers,playerStatus});
+  // });
 
   socket.on('sendAttack', ({ attack, damage }) => {
     playerStatus.forEach((elemen) => {
@@ -66,6 +73,11 @@ io.on('connection', (socket) => {
   })
 })
 
+//     });
+//     io.emit('sendAttack', playerStatus);
+//   });
+// });
+console.log(playerStatus)
 http.listen(port, () => {
   console.log(`listen on http://localhost:${port}`)
 })

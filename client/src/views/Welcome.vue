@@ -8,10 +8,10 @@
           </div>
           <form class="mt-5 align-content-center">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Username">
+              <input v-model="username" type="text" class="form-control" placeholder="Username">
             </div>
             <div class="d-flex justify-content-center mt-5">
-              <button class="btn btn-success w-50">Play</button>
+              <button @click.prevent="login" class="btn btn-success w-50">Play</button>
             </div>
           </form>
         </div>
@@ -27,9 +27,18 @@ export default {
   data () {
     return {
       mainLogo,
-      typeLogo
+      typeLogo,
+      username:'',
+      hp:100
     }
-  }
+  },
+  methods:{
+      login(){
+        localStorage.setItem('username',this.username)
+        this.$socket.emit('userLogin',{username:this.username,hp:this.hp})
+        this.$router.push({name:'Arena'})
+      }
+    }
 }
 </script>
 
