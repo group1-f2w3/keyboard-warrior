@@ -54,6 +54,7 @@
     },
     sockets: {
       enterArena() {
+        console.log('enter arena')
         this.fullArena = false
         localStorage.setItem('username', this.username)
         this.$router.push({ name: 'Arena' })

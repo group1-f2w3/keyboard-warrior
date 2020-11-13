@@ -102,9 +102,9 @@ io.on('connection', (socket) => {
       console.log(playerStatus.length)
       io.emit('fullArena')
     } else {
-      playerStatus.push({ username, hp: 100 })
+      playerStatus.push({ username, hp: 50 })
 
-      io.emit('enterArena')
+      socket.emit('enterArena')
       //broadcasting playerinfo
       io.emit('playerStatus', playerStatus)
     }

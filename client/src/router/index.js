@@ -48,7 +48,7 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: Login,
+    component: Welcome,
   },
   {
     path: '/typing',
