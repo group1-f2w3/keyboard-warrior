@@ -1,7 +1,7 @@
 <template>
   <section class="winner-page loser-page">
       <WinnerCard/>
-      <LoserCard/>
+      <!-- <LoserCard/> -->
   </section>
 </template>
 

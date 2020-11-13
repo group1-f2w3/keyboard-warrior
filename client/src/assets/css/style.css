@@ -11,6 +11,8 @@ body .welcome-page {
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
+  background-image: url(../welcome-bg.jpg);
+  background-size: cover;
 }
 body .welcome-page .main-logo {
   position: absolute;
@@ -18,9 +20,10 @@ body .welcome-page .main-logo {
 }
 body .welcome-page .card {
   margin-top: 200px;
-  margin-bottom: 0;
+  margin-bottom: 80px;
   width: 400px;
   height: 400px;
+  border: 10px solid #111111;
   border-radius: 30px;
 }
 body .welcome-page .card input {
@@ -35,6 +38,8 @@ body .arena-page {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  background-image: url(../background_test.png);
+  padding: 50px;
 }
 body .arena-page .card-arena {
   width: 1256px;
@@ -72,10 +77,13 @@ body .arena-page .card-type {
   min-width: 30%;
 }
 body .winner-page {
-  margin-top: 50px;
   display: flex;
+  padding: 50px;
   justify-content: center;
   text-align: center;
+  background-image: url(../result-bg.jpg);
+  background-size: cover;
+  background-position: left;
 }
 body .winner-page .card-winner {
   width: 490px;

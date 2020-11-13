@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/typing">Typing</router-link>
-      <router-link to="/fight">Fight</router-link>
+      <router-link to="/typing">Typing</router-link> |
+      <router-link to="/fight">Fight</router-link> |
       <router-link to="/welcome">Welcome</router-link> |
       <router-link to="/arena">Arena</router-link> |
       <router-link to="/result">Result</router-link>
