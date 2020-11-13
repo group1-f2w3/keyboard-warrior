@@ -16,7 +16,7 @@
     <div v-else id="card-room-container">
       <div id="card-room" v-for="(room, i) in rooms" :key="i">
         <h3>{{ room.name }}</h3>
-        <p>Admin: {{ room.admin }}</p>
+        <p>Host: {{ room.admin }}</p>
         <button @click="joinRoom(room.name)" v-if="room.admin !== username">
           Join Room
         </button>
