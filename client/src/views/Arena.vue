@@ -113,6 +113,16 @@
 
       finish(playerStatus) {
         this.playerStatus = playerStatus
+        localStorage.removeItem('username')
+        // playerStatus.forEach((player) => {
+        //   if (player.username === this.username) {
+        //     if (player.hp <= 0) {
+        //       this.$router.push('/lose')
+        //     } else {
+        //       this.$router.push('/win')
+        //     }
+        //   }
+        // })
         this.$router.push('/result')
       },
       // sendAttack(damages) {

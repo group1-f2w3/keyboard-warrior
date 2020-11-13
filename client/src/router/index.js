@@ -8,6 +8,8 @@ import Arena from '../views/Arena.vue'
 import Result from '../views/Result.vue'
 import Room from '../views/Room.vue'
 import Lobby from '../views/Lobby.vue'
+import Lose from '../views/Lose.vue'
+import Win from '../views/Win.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +56,16 @@ const routes = [
     path: '/typing',
     name: 'Typing',
     component: Typing,
+  },
+  {
+    path: '/lose',
+    name: 'Lose',
+    component: Lose,
+  },
+  {
+    path: '/win',
+    name: 'Win',
+    component: Win,
   },
 
   {
