@@ -127,5 +127,14 @@ body .loser-page .card-loser .btn-section .btn {
 body .loser-page .card-loser .btn-section .btn-danger {
   margin-left: 10px;
 }
+body .rooms-page {
+  padding: 70px;
+  background-image: url(../rooms-bg.png);
+  background-size: cover;
+  min-height: 100vh;
+}
+body .rooms-page .title {
+  color: #372d13;
+}
 
 /*# sourceMappingURL=style.css.map */

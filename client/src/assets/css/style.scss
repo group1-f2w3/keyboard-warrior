@@ -156,4 +156,17 @@ body {
       }
     }
   }
+
+  .rooms-page{
+    padding: 70px;
+    background-image: url(../rooms-bg.png);
+    background-size: cover;;
+    min-height: 100vh;
+
+    .title{
+      color: #372d13;
+    }
+  }
+
+
 }

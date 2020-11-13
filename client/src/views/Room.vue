@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <h1>Rooms</h1>
+  <div class="rooms-page">
+    <h1 class="title">Rooms</h1>
 
-    <button v-if="!showForm" @click="showForm = true">Create Room</button>
+    <button class="btn btn-success mb-3" v-if="!showForm" @click="showForm = true">Create Room</button>
     <form v-else @submit.prevent="createRoom">
-      <label for="room">Room name</label>
-      <input v-model="roomName" type="text" name="room" />
-      <button>Create room</button>
+      <label for="room" class="text-white mr-3">Room Name</label>
+      <input v-model="roomName" type="text" name="room" class="mr-3 rounded" required/>
+      <button class="btn btn-success">Create Room</button>
     </form>
 
     <div v-if="rooms.length === 0">
