@@ -53,6 +53,8 @@
 <script>
   import knight from '@/assets/knight-a-idle.gif'
   import knightEnemy from '@/assets/knight-b-idle.gif'
+  import sound from '@/audio/steelsword.mp3'
+  import backSound from '@/audio/09_-_00_-_Return_to_Prontera.mp3'
   export default {
     name: 'Arena',
     data() {
@@ -67,6 +69,9 @@
         sisaHp: 100,
         knight,
         knightEnemy,
+        sound,
+        backSound,
+        bgm,
       }
     },
     methods: {
@@ -108,10 +113,14 @@
         this.sisaHp = localStorage.getItem('hp')
 
         console.log(hit, healthbar, 'tes client')
+        let soundEffect = new Audio(this.sound)
+        soundEffect.play()
       },
     },
     created() {
       this.$store.dispatch('fetchWords')
+      this.bgm = new Audio(this.backSound)
+      bgm.play()
     },
   }
 </script>
