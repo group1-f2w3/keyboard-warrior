@@ -6,6 +6,8 @@ import Typing from '../components/Typing.vue'
 import Welcome from '../views/Welcome.vue'
 import Arena from '../views/Arena.vue'
 import Result from '../views/Result.vue'
+import Room from '../views/Room.vue'
+import Lobby from '../views/Lobby.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +25,16 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  },
+  {
+    path: '/rooms',
+    name: 'Room',
+    component: Room,
+  },
+  {
+    path: '/lobby',
+    name: 'Lobby',
+    component: Lobby,
   },
   {
     path: '/fight',
