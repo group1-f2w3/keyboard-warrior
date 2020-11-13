@@ -7,17 +7,13 @@
             <div class="col" v-for="(user,i) in onlineUsers" :key="i">
                 <h3>{{user.username}}</h3>
               <div>
-                <div id="myBar1">{{healthbar}}</div>
+                <div id="myBar1">{{sisaHp}}</div>
               </div>
             </div>
 
           </div>
           <div class="row">
             <!-- Buat characterr -->
-            <!-- <div v-for="(damage,i) in damages" :key="i">
-               <p>{{damage.username}}</p>
-               <p>{{damage.damage}}</p> 
-            </div> -->
             <h5 class="display-4 mb-5 ml-5" id="current-word">{{$store.state.currentWord}}</h5>
           </div>
         </div>
@@ -43,7 +39,8 @@ export default {
       username:'',
       hp:'',
       damages:[],
-      healthbar:100
+      healthbar:100,
+      sisaHp:100
 
     }
   },
@@ -78,10 +75,14 @@ export default {
           hit = Number(this.damages[this.damages.length-1].damage)
           sender = this.damages[i].username
         }
+        let healthbar= localStorage.getItem('hp')
         if(sender !== this.username){
-          this.healthbar -= hit
+          healthbar -= hit
         }
-        console.log(hit,sender,'tes client')
+        localStorage.setItem('hp',healthbar)
+        this.sisaHp = localStorage.getItem('hp')
+
+        console.log(hit,healthbar,'tes client')
       }
     },
   created(){
