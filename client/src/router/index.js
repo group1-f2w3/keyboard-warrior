@@ -28,11 +28,11 @@ const routes = [
   },
   {
     path: '/rooms',
-    name: 'Room',
+    name: 'Rooms',
     component: Room,
   },
   {
-    path: '/lobby',
+    path: '/lobby:name',
     name: 'Lobby',
     component: Lobby,
   },
