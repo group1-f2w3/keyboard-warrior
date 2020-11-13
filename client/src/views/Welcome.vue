@@ -29,12 +29,13 @@ export default {
       mainLogo,
       typeLogo,
       username:'',
-      
+      hp:100
     }
   },
   methods:{
       login(){
         localStorage.setItem('username',this.username)
+        localStorage.setItem('hp', this.hp)
         this.$socket.emit('userLogin',{username:this.username})
         this.$router.push({name:'Arena'})
       }

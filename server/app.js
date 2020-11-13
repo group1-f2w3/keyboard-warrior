@@ -12,26 +12,22 @@ app.use(express.urlencoded({ extended: false }));
 
 let onlineUsers = []
 let playerStatus = [];
-
+let damages =[]
 io.on('connection', (socket) => {
   console.log('a user connected');
 
   //user login
   socket.on('userLogin', ({username}) => {
-    onlineUsers.push({username,hp:100})
-    console.log(username)
+    playerStatus.push({username,hp:100})
+
     //broadcasting playerinfo
-    io.emit('userLogin', onlineUsers);
+    io.emit('userLogin', playerStatus);
   });
 
-  socket.on('sendAttack', ({attack,damage}) => {
-    playerStatus.forEach((elemen) => {
-      // if (elemen.username !== attack.username) {
-      //   //memberikan damage kepada lawan
-      //   elemen.hp -= damage;
-      // }
-    });
-    io.emit('sendAttack', playerStatus);
+  socket.on('sendAttack', (dps) => {
+    damages.push(dps)
+    io.emit('sendAttack',damages)
+  
   });
 });
 console.log(playerStatus)
