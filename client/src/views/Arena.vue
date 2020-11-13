@@ -4,9 +4,12 @@
         <div class="container">
           <div class="row">
             <div class="col">
-              <h3 v-for="(user,i) in onlineUsers" :key="i">{{user}}</h3>
-              <div id="myProgress1">
-                <div id="myBar1"></div>
+              <div v-for="(user,i) in onlineUsers" :key="i">
+                <h3>{{user.username}}</h3> 
+        
+                <div id="myProgress1">
+                  <div id="myBar1">{{user.hp}}</div>
+                </div>
               </div>
             </div>
             <div class="col">
@@ -55,14 +58,14 @@ export default {
         this.typing =''
       }
     },
-    sockets:{
-      userLogin({onlineUsers,playerStatus}){
-        console.log(onlineUsers,playerStatus)
-        this.onlineUsers = onlineUsers
-        this.playerStatus = playerStatus
-      }
-    }
   },
+  sockets:{
+      userLogin(onlineUsers){
+        console.log(onlineUsers)
+        this.onlineUsers = onlineUsers
+ 
+      }
+    },
   created(){
     this.$store.dispatch('fetchWords')
   }

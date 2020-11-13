@@ -17,19 +17,19 @@ io.on('connection', (socket) => {
   console.log('a user connected');
 
   //user login
-  socket.on('userLogin', ({username,hp}) => {
-    playerStatus.push(hp)
-    onlineUsers.push(username)
+  socket.on('userLogin', ({username}) => {
+    onlineUsers.push({username,hp:100})
+    console.log(username)
     //broadcasting playerinfo
-    io.emit('userLogin', {onlineUsers,playerStatus});
+    io.emit('userLogin', onlineUsers);
   });
 
   socket.on('sendAttack', ({attack,damage}) => {
     playerStatus.forEach((elemen) => {
-      if (elemen.username !== attack.username) {
-        //memberikan damage kepada lawan
-        elemen.hp -= damage;
-      }
+      // if (elemen.username !== attack.username) {
+      //   //memberikan damage kepada lawan
+      //   elemen.hp -= damage;
+      // }
     });
     io.emit('sendAttack', playerStatus);
   });
