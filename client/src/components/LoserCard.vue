@@ -2,11 +2,11 @@
   <div class="card card-loser">
       <div class="card-body">
         <img :src="medal" width="170px" class="mr-1 mb-3 trophy" alt="">
-        <h3>You lose, train more hard</h3>
-        <p>Username</p>
+        <h3 class="text-result">You lose, train harder!</h3>
+        <p class="text-result">Username</p>
         <div class="btn-section">
-          <button class="btn btn-success">Play Again</button>
-          <button class="btn btn-danger">Exit</button>
+          <button class="btn btn-success" @click="gotoLogin">Play Again</button>
+          <!-- <button class="btn btn-danger">Exit</button> -->
         </div>
       </div>
     </div>
@@ -20,10 +20,20 @@ export default {
     return {
       medal
     }
+  },
+  methods: {
+    gotoLogin () {
+      this.$router.push('/welcome')
+    }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .card-loser {
+    background: transparent;
+  }
+  .text-result {
+    color: white
+  }
 </style>

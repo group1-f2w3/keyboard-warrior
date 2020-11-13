@@ -41,24 +41,26 @@
       </div>
     </div>
 
-    <div id="word">
-      <h1>{{ word }}</h1>
-    </div>
+    <div id="input-container">
+      <div id="word">
+        <h1>{{ word }}</h1>
+      </div>
 
-    <!-- TYPE CONTAINER -->
-    <div class="card card-type p-3 mt-3">
-      <h1 class="display-5 ">
-        <input
-          type="text"
-          v-model="typing"
-          v-on:keyup.enter="matchWords"
-          class="form-control form-control-lg"
-          placeholder="Type To Attack.."
-          id="word-input"
-          autofocus
-        />
-      </h1>
-    </div>
+      <!-- TYPE CONTAINER -->
+      <!-- <div id="input" class="card card-type p-3 mt-3"> -->
+        <h1 class="display-5 ">
+          <input
+            type="text"
+            v-model="typing"
+            v-on:keyup.enter="matchWords"
+            class="form-control form-control-lg"
+            placeholder="Type To Attack.."
+            id="word-input"
+            autofocus
+          />
+        </h1>
+      </div>
+    <!-- </div> -->
   </section>
 </template>
 
@@ -173,11 +175,19 @@
 </script>
 
 <style>
+
+#input-container {
+  position: relative;
+  top: -130px;
+}
+
   #word {
-    position: absolute;
+    /* position: absolute; */
     top: 500px;
     color: white;
     font-size: 3rem;
-    border-bottom: 5px solid white;
+    text-decoration: underline;
+    text-underline-offset: 2em;
+    /* border-bottom: 5px solid white; */
   }
 </style>

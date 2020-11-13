@@ -10,7 +10,7 @@
     name: 'Result',
     data() {
       return {
-        trophy,
+        // trophy,
       }
     },
     components: {

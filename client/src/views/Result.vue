@@ -12,7 +12,7 @@ export default {
   name: 'Result',
   data () {
     return {
-      trophy
+      // trophy
     }
   },
   components: {
