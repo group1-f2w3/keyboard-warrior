@@ -79,4 +79,12 @@ const router = new VueRouter({
   routes,
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/welcome' && !localStorage.getItem('username')) {
+    next('/welcome')
+  } else {
+    next()
+  }
+})
+
 export default router

@@ -20,6 +20,9 @@
               Play
             </button>
           </div>
+          <div v-if="fullArena" style="color: red">
+            Arena is full, please wait
+          </div>
         </form>
       </div>
     </div>
@@ -45,15 +48,25 @@
         mainLogo,
         typeLogo,
         username: '',
-        hp: 100,
+        // hp: 100,
+        fullArena: false,
       }
+    },
+    sockets: {
+      enterArena() {
+        this.fullArena = false
+        localStorage.setItem('username', this.username)
+        this.$router.push({ name: 'Arena' })
+      },
+
+      fullArena() {
+        this.fullArena = true
+      },
     },
     methods: {
       login() {
-        localStorage.setItem('username', this.username)
-        localStorage.setItem('hp', this.hp)
+        // localStorage.setItem('hp', this.hp)
         this.$socket.emit('userLogin', { username: this.username })
-        this.$router.push({ name: 'Arena' })
       },
     },
   }

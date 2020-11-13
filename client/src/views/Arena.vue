@@ -10,16 +10,18 @@
                 <div id="myBar1">{{sisaHp}}</div> -->
       <div class="container">
         <div class="row">
-          <div class="col">
-            <h3 class="text-white">health bar player 1</h3>
+          <div v-if="playerStatus.length > 0" class="col-5">
+            <h3 class="text-white">{{ playerStatus[0].username }}</h3>
+            <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
             <div id="myProgress1">
-              <div id="myBar1"></div>
+              <div id="myBar1">{{ playerStatus[0].hp }}</div>
             </div>
           </div>
-          <div class="col">
-            <h3 class="text-white">health bar player 2</h3>
+          <div v-if="playerStatus.length > 1" class="col-5">
+            <h3 class="text-white">{{ playerStatus[1].username }}</h3>
+            <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
             <div id="myProgress2">
-              <div id="myBar2"></div>
+              <div id="myBar2">{{ playerStatus[1].hp }}</div>
             </div>
           </div>
         </div>
@@ -28,9 +30,19 @@
         <!-- <h5 class="display-4 mb-5 ml-5" id="current-word">{{$store.state.currentWord}}</h5> -->
         <div class="row d-flex mt-5">
           <img :src="knight" width="50%" alt="" srcset="" />
-          <img :src="knightEnemy" width="50%" alt="" srcset="" />
+          <img
+            v-if="playerStatus.length > 1"
+            :src="knightEnemy"
+            width="50%"
+            alt=""
+            srcset=""
+          />
         </div>
       </div>
+    </div>
+
+    <div id="word">
+      <h1>{{ word }}</h1>
     </div>
 
     <!-- TYPE CONTAINER -->
@@ -38,8 +50,8 @@
       <h1 class="display-5 ">
         <input
           type="text"
-          v-on:keyup.enter="matchWords"
           v-model="typing"
+          v-on:keyup.enter="matchWords"
           class="form-control form-control-lg"
           placeholder="Type To Attack.."
           id="word-input"
@@ -57,9 +69,10 @@
     name: 'Arena',
     data() {
       return {
+        word: '',
         typing: '',
-        damage: 0,
-        onlineUsers: [],
+        // damage: 0,
+        playerStatus: [],
         username: '',
         hp: '',
         damages: [],
@@ -71,49 +84,79 @@
     },
     methods: {
       matchWords() {
-        if (this.typing == this.$store.state.currentWord) {
-          this.$store.dispatch('fetchWords')
+        if (this.typing == this.word) {
+          // this.$store.dispatch('fetchWords')
+          // this.$socket.emit('fetchWords')
           this.typing = ''
-          this.damage = +this.$store.state.currentWord.length
+          let damage = this.word.length
+          this.$socket.emit('sendAttack', { username: this.username, damage })
 
-          let dps = {
-            username: localStorage.getItem('username'),
-            damage: +this.damage,
-          }
-          this.$socket.emit('sendAttack', dps)
+          // let dps = {
+          //   username: localStorage.getItem('username'),
+          //   damage: +this.damage,
+          // }
         } else {
           this.typing = ''
         }
       },
     },
     sockets: {
-      userLogin(playerStatus) {
-        this.username = localStorage.getItem('username')
-        this.hp = localStorage.getItem('hp')
-        this.onlineUsers = playerStatus
+      fetchWord(word) {
+        console.log('receiving new word:', word)
+        this.word = word
       },
-      sendAttack(damages) {
-        this.damages = damages
-        let sender
-        let hit = 0
-        for (let i = 0; i < this.damages.length; i++) {
-          hit = Number(this.damages[this.damages.length - 1].damage)
-          sender = this.damages[i].username
-        }
-        let healthbar = localStorage.getItem('hp')
-        if (sender !== this.username) {
-          healthbar -= hit
-        }
-        localStorage.setItem('hp', healthbar)
-        this.sisaHp = localStorage.getItem('hp')
+      playerStatus(playerStatus) {
+        // this.hp = localStorage.getItem('hp')
+        this.playerStatus = playerStatus
+        console.log(playerStatus, '<<< playerStatus')
+      },
 
-        console.log(hit, healthbar, 'tes client')
+      finish(playerStatus) {
+        this.playerStatus = playerStatus
+        this.$router.push('/result')
       },
+      // sendAttack(damages) {
+      //   this.damages = damages
+      //   let sender
+      //   let hit = 0
+      //   for (let i = 0; i < this.damages.length; i++) {
+      //     hit = Number(this.damages[this.damages.length - 1].damage)
+      //     sender = this.damages[i].username
+      //   }
+      //   let healthbar = localStorage.getItem('hp')
+      //   if (sender !== this.username) {
+      //     healthbar -= hit
+      //   }
+      //   localStorage.setItem('hp', healthbar)
+      //   this.sisaHp = localStorage.getItem('hp')
+
+      //   console.log(hit, healthbar, 'tes client')
+      // },
     },
     created() {
-      this.$store.dispatch('fetchWords')
+      // this.$store.dispatch('fetchWords')
+      console.log('created')
+      this.$socket.emit('playerStatus')
+      this.$socket.emit('fetchWord')
+      this.username = localStorage.getItem('username')
+      // console.log(localStorage.getItem('username'))
+      console.log(this.username)
+    },
+    mounted() {
+      if (this.playerStatus.length === 0) {
+        localStorage.removeItem('username')
+        // this.$router.push('/welcome')
+      }
     },
   }
 </script>
 
-<style></style>
+<style>
+  #word {
+    position: absolute;
+    top: 500px;
+    color: white;
+    font-size: 3rem;
+    border-bottom: 5px solid white;
+  }
+</style>
