@@ -124,6 +124,7 @@ io.on('connection', (socket) => {
     playerStatus.forEach((player) => {
       if (player.hp <= 0) {
         player.hp = 0
+        playerStatus = []
         io.emit('finish', playerStatus)
       } else {
         io.emit('playerStatus', playerStatus)
