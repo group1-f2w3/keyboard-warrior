@@ -14,14 +14,14 @@
             <h3 class="text-white">{{ playerStatus[0].username }}</h3>
             <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
             <div id="myProgress1">
-              <div id="myBar1">{{ playerStatus[0].hp }}</div>
+              <div id="myBar1" :style="hp1"></div>
             </div>
           </div>
           <div v-if="playerStatus.length > 1" class="col-5">
             <h3 class="text-white">{{ playerStatus[1].username }}</h3>
             <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
             <div id="myProgress2">
-              <div id="myBar2">{{ playerStatus[1].hp }}</div>
+              <div id="myBar2" :style="hp2"></div>
             </div>
           </div>
         </div>
@@ -65,8 +65,6 @@
 <script>
   import knight from '@/assets/knight-a-idle.gif'
   import knightEnemy from '@/assets/knight-b-idle.gif'
-  import sound from '@/audio/steelsword.mp3'
-  import backSound from '@/audio/09_-_00_-_Return_to_Prontera.mp3'
   export default {
     name: 'Arena',
     data() {
@@ -75,16 +73,11 @@
         typing: '',
         // damage: 0,
         playerStatus: [],
+        hp1: '',
+        hp2: '',
         username: '',
-        hp: '',
-        damages: [],
-        healthbar: 100,
-        sisaHp: 100,
         knight,
         knightEnemy,
-        sound,
-        backSound,
-        bgm,
       }
     },
     methods: {
@@ -95,10 +88,6 @@
           this.typing = ''
           let damage = this.word.length
           this.$socket.emit('sendAttack', { username: this.username, damage })
-
-          // console.log(hit, healthbar, 'tes client')
-          let soundEffect = new Audio(this.sound)
-          soundEffect.play()
 
           // let dps = {
           //   username: localStorage.getItem('username'),
@@ -116,7 +105,19 @@
       },
       playerStatus(playerStatus) {
         // this.hp = localStorage.getItem('hp')
+        if (playerStatus.length === 0 ) {
+          localStorage.clear()
+          this.$router.replace('/welcome')
+        }
         this.playerStatus = playerStatus
+        if (this.playerStatus[0]) {
+          let hp1 = 100*this.playerStatus[0].hp/this.playerStatus[0].maxHp
+          this.hp1 = `width:${hp1}%`
+        }
+        if (this.playerStatus[1]) {
+          let hp2 = 100 - 100*this.playerStatus[1].hp/this.playerStatus[1].maxHp
+          this.hp2 = `width:${hp2}%`
+        }
         console.log(playerStatus, '<<< playerStatus')
       },
 
@@ -132,7 +133,8 @@
         //     }
         //   }
         // })
-        this.$router.push('/result')
+        // this.$router.push('/result')
+        this.$router.push('/win')
       },
       // sendAttack(damages) {
       //   this.damages = damages
@@ -160,8 +162,6 @@
       this.username = localStorage.getItem('username')
       // console.log(localStorage.getItem('username'))
       console.log(this.username)
-      this.bgm = new Audio(this.backSound)
-      bgm.play()
     },
     mounted() {
       if (this.playerStatus.length === 0) {

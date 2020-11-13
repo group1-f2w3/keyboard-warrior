@@ -56,6 +56,7 @@
       enterArena() {
         console.log('enter arena')
         this.fullArena = false
+        console.log('username:', this.username)
         localStorage.setItem('username', this.username)
         this.$router.push({ name: 'Arena' })
       },

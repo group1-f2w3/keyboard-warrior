@@ -11,9 +11,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 let rooms = []
-let onlineUsers = []
 let playerStatus = []
-let damages = []
+let maxHp = 50
 
 let words = require('./kamus')
 
@@ -102,7 +101,7 @@ io.on('connection', (socket) => {
       console.log(playerStatus.length)
       io.emit('fullArena')
     } else {
-      playerStatus.push({ username, hp: 50 })
+      playerStatus.push({ username, hp: 50, maxHp })
 
       socket.emit('enterArena')
       //broadcasting playerinfo
