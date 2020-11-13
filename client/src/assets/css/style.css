@@ -41,6 +41,9 @@ body .arena-page .card-arena {
   height: 500px;
   border-radius: 30px;
   padding: 30px;
+  background-image: url(../arena.jpg);
+  background-size: cover;
+  background-position-y: bottom;
 }
 body .arena-page .card-arena h3 {
   text-align: center;
