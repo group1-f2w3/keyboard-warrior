@@ -27,9 +27,17 @@
 </template>
 
 <script>
-<<<<<<< HEAD
   import mainLogo from '@/assets/main-logo.png'
   import typeLogo from '@/assets/type-logo.png'
+  // export default {
+  //   name: 'Welcome',
+  //   data() {
+  //     return {
+  //       mainLogo,
+  //       typeLogo,
+  //       username: '',
+  //     }
+  //   }
   export default {
     name: 'Welcome',
     data() {
@@ -37,31 +45,13 @@
         mainLogo,
         typeLogo,
         username: '',
-=======
-import mainLogo from '@/assets/main-logo.png'
-import typeLogo from '@/assets/type-logo.png'
-export default {
-  name: 'Welcome',
-  data () {
-    return {
-      mainLogo,
-      typeLogo,
-      username:'',
-      hp:100
-    }
-  },
-  methods:{
-      login(){
-        localStorage.setItem('username',this.username)
-        localStorage.setItem('hp', this.hp)
-        this.$socket.emit('userLogin',{username:this.username})
-        this.$router.push({name:'Arena'})
->>>>>>> 5e3406cc6674bf908670c3449cc5174f05427b19
+        hp: 100,
       }
     },
     methods: {
       login() {
         localStorage.setItem('username', this.username)
+        localStorage.setItem('hp', this.hp)
         this.$socket.emit('userLogin', { username: this.username })
         this.$router.push({ name: 'Arena' })
       },
