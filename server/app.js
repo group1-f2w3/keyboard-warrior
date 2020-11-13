@@ -25,13 +25,14 @@ io.on('connection', (socket) => {
     io.emit('userLogin', playerStatus);
   });
 
-  socket.on('sendAtteck', (attack) => {
+  socket.on('sendAttack', ({attack,damage}) => {
     playerStatus.forEach((elemen) => {
       if (elemen.username !== attack.username) {
-        elemen.hp -= 10;
+        //memberikan damage kepada lawan
+        elemen.hp -= damage;
       }
     });
-
+    console.log(damage,'server')
     io.emit('sendAttack', playerStatus);
   });
 });

@@ -18,7 +18,7 @@
           </div>
           <div class="col-md-6">
             <h3>Score:
-              <span id="score">0</span>
+              <span id="score">{{this.damage}}</span>
             </h3>
           </div>
           <br><br>
@@ -49,7 +49,8 @@ export default {
   name:'Fight',
   data(){
     return{
-      typing:''
+      typing:'',
+      damage:0
     }
   },
   methods:{
@@ -57,6 +58,8 @@ export default {
       if(this.typing == this.$store.state.currentWord){
         this.$store.dispatch('fetchWords')
         this.typing = ''
+        this.damage = this.$store.state.currentWord.length
+        this.$socket.emit('sendAttack',{damage:this.damage})
       }else{
         this.typing =''
       }
