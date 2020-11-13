@@ -7,7 +7,7 @@
           <img :src="typeLogo" width="200px" alt="" />
         </div>
         <form
-          @submit.prevent="submitUsername"
+          @submit.prevent="login"
           class="mt-5 align-content-center"
         >
           <div class="form-group">
@@ -42,7 +42,7 @@
     methods: {
       login() {
         localStorage.setItem('username', this.username)
-        this.$socket.emit('userLogin', this.username)
+        this.$socket.emit('userLogin', { username: this.username })
         this.$router.push('/rooms')
       },
     },
