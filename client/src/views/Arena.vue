@@ -1,5 +1,5 @@
 <template>
-  <section class="arena-page">
+  <section class="arena-page" >
     <div class="card card-arena">
       <!-- <div class="container" >
           <div class="row" >
@@ -175,11 +175,14 @@
 </script>
 
 <style>
+  section.arena-page {
+    padding-bottom: 0;
+  }
 
-#input-container {
-  position: relative;
-  top: -130px;
-}
+  #input-container {
+    position: relative;
+    top: -130px;
+  }
 
   #word {
     /* position: absolute; */
