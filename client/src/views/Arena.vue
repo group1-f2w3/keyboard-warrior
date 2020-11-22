@@ -1,5 +1,5 @@
 <template>
-  <section class="arena-page" >
+  <section class="arena-page">
     <div class="card card-arena">
       <!-- <div class="container" >
           <div class="row" >
@@ -48,18 +48,18 @@
 
       <!-- TYPE CONTAINER -->
       <!-- <div id="input" class="card card-type p-3 mt-3"> -->
-        <h1 class="display-5 ">
-          <input
-            type="text"
-            v-model="typing"
-            v-on:keyup.enter="matchWords"
-            class="form-control form-control-lg"
-            placeholder="Type To Attack.."
-            id="word-input"
-            autofocus
-          />
-        </h1>
-      </div>
+      <h1 class="display-5 ">
+        <input
+          type="text"
+          v-model="typing"
+          v-on:keyup.enter="matchWords"
+          class="form-control form-control-lg"
+          placeholder="Type To Attack.."
+          id="word-input"
+          autofocus
+        />
+      </h1>
+    </div>
     <!-- </div> -->
   </section>
 </template>
@@ -104,20 +104,23 @@
       fetchWord(word) {
         console.log('receiving new word:', word)
         this.word = word
+        // kosongkan typing setiap menerima soal baru
+        this.typing = ''
       },
       playerStatus(playerStatus) {
         // this.hp = localStorage.getItem('hp')
-        if (playerStatus.length === 0 ) {
+        if (playerStatus.length === 0) {
           localStorage.clear()
           this.$router.replace('/welcome')
         }
         this.playerStatus = playerStatus
         if (this.playerStatus[0]) {
-          let hp1 = 100*this.playerStatus[0].hp/this.playerStatus[0].maxHp
+          let hp1 = (100 * this.playerStatus[0].hp) / this.playerStatus[0].maxHp
           this.hp1 = `width:${hp1}%`
         }
         if (this.playerStatus[1]) {
-          let hp2 = 100 - 100*this.playerStatus[1].hp/this.playerStatus[1].maxHp
+          let hp2 =
+            100 - (100 * this.playerStatus[1].hp) / this.playerStatus[1].maxHp
           this.hp2 = `width:${hp2}%`
         }
         console.log(playerStatus, '<<< playerStatus')
