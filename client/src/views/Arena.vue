@@ -17,7 +17,7 @@
               <div id="myBar1" :style="hp1"></div>
             </div>
           </div>
-          <div v-if="playerStatus.length > 1" class="col-5">
+          <div v-if="playerStatus.length === 2" class="col-5">
             <h3 class="text-white">{{ playerStatus[1].username }}</h3>
             <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
             <div id="myProgress2">
@@ -28,10 +28,10 @@
         <!-- <div class="row">-->
         <!-- Buat characterr -->
         <div class="row d-flex mt-5">
-          <img :src="knight" width="50%" alt="" srcset="" />
+          <img :src="knight1" width="50%" alt="" srcset="" />
           <img
-            v-if="playerStatus.length > 1"
-            :src="knightEnemy"
+            v-if="playerStatus.length === 2"
+            :src="knight2"
             width="50%"
             alt=""
             srcset=""
@@ -40,14 +40,14 @@
       </div>
     </div>
 
-    <div v-if="isPlaying" id="input-container">
+    <div v-if="playerStatus.length === 2" id="input-container">
       <div id="word">
         <h1>{{ word }}</h1>
       </div>
 
       <!-- TYPE CONTAINER -->
       <!-- <div id="input" class="card card-type p-3 mt-3"> -->
-      <h1 v-if="isPlaying" class="display-5 ">
+      <h1 v-if="playerStatus.length === 2" class="display-5 ">
         <input
           type="text"
           v-model="typing"
@@ -65,13 +65,23 @@
 </template>
 
 <script>
-  import knight from '@/assets/knight-a-idle.gif'
-  import knightEnemy from '@/assets/knight-b-idle.gif'
+  import knight1 from '@/assets/knight-a-idle.gif'
+  import knight2 from '@/assets/knight-b-idle.gif'
   import sword1 from '@/audio/steelsword.mp3'
   import sword2 from '@/audio/sword1.mp3'
   import backSound from '../audio/makai_symphony-dragon_castle-96kbps.mp3'
   import sfxSword1 from '../audio/steelsword.mp3'
   import sfxSword2 from '../audio/sword1.mp3'
+  import animKnight1Attack from '../assets/knight-attack.gif'
+  import animKnight1Hurt from '../assets/knight-a-hurt.gif'
+  import animKnight1Idle from '../assets/knight-a-idle.gif'
+  import animKnight1Lose from '../assets/knight-a-lose.gif'
+  import animKnight1Win from '../assets/knight-a-win.gif'
+  import animKnight2Attack from '../assets/knight2-attack.gif'
+  import animKnight2Hurt from '../assets/knight-b-hurt.gif'
+  import animKnight2Idle from '../assets/knight-b-idle.gif'
+  import animKnight2Lose from '../assets/knight-b-lose.gif'
+  import animKnight2Win from '../assets/knight-b-win.gif'
   export default {
     name: 'Arena',
     data() {
@@ -82,11 +92,27 @@
         hp1: '',
         hp2: '',
         username: '',
-        knight,
-        knightEnemy,
         sound: {
           attack: [sfxSword1, sfxSword2],
           crowd: '',
+        },
+        knight1: animKnight1Idle,
+        knight2: animKnight2Idle,
+        animation: {
+          knight1: {
+            attack: animKnight1Attack,
+            hurt: animKnight1Hurt,
+            idle: animKnight1Idle,
+            lose: animKnight1Lose,
+            win: animKnight1Win,
+          },
+          knight2: {
+            attack: animKnight2Attack,
+            hurt: animKnight2Hurt,
+            idle: animKnight2Idle,
+            lose: animKnight2Lose,
+            win: animKnight2Win,
+          },
         },
       }
     },
@@ -101,16 +127,23 @@
       },
 
       attack() {
+        this.knight1 = this.animation.knight1.attack
+        this.knight2 = this.animation.knight2.attack
+
         let soundIndex = Math.floor(Math.random() * this.sound.attack.length)
         let sound = this.sound.attack[soundIndex]
         let sfx = new Audio(sound)
-        sfx.volume = 0.25
+        sfx.volume = 0.3
 
         sfx.play()
       },
 
       randomAttack() {
-        if (Math.random() > 0.5) this.attack()
+        if (Math.random() > 0.5) {
+          this.knight1 = this.animation.knight1.attack
+          this.knight2 = this.animation.knight2.attack
+          this.attack()
+        }
       },
     },
     computed: {
@@ -129,7 +162,12 @@
         // kosongkan typing setiap menerima soal baru
         this.typing = ''
 
-        this.attack()
+        if (
+          this.playerStatus[0].hp != this.playerStatus[0].maxHp &&
+          this.playerStatus[1].hp != this.playerStatus[1].maxHp
+        ) {
+          this.attack()
+        }
       },
       playerStatus(playerStatus) {
         // Kalo di server ga ada pemain, kosongkan localstorage, kembali ke login
@@ -180,9 +218,12 @@
       // console.log(localStorage.getItem('username'))
       console.log(this.username)
 
+      // this.knight1 = this.animation.knight1.idle
+      // this.knight2 = this.animation.knight2.idle
+
       // play background music
       let newBgm = new Audio(backSound)
-      newBgm.volume = 0.25
+      newBgm.volume = 0.15
       // bgm.play()
       this.$store.dispatch('setBgm', newBgm)
     },
