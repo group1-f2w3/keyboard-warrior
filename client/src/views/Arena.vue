@@ -52,6 +52,7 @@
           type="text"
           v-model="typing"
           v-on:keyup.enter="matchWords"
+          @input="randomAttack"
           class="form-control form-control-lg"
           placeholder="Type To Attack.."
           id="word-input"
@@ -69,6 +70,8 @@
   import sword1 from '@/audio/steelsword.mp3'
   import sword2 from '@/audio/sword1.mp3'
   import backSound from '../audio/makai_symphony-dragon_castle-96kbps.mp3'
+  import sfxSword1 from '../audio/steelsword.mp3'
+  import sfxSword2 from '../audio/sword1.mp3'
   export default {
     name: 'Arena',
     data() {
@@ -81,6 +84,10 @@
         username: '',
         knight,
         knightEnemy,
+        sound: {
+          attack: [sfxSword1, sfxSword2],
+          crowd: '',
+        },
       }
     },
     methods: {
@@ -88,11 +95,22 @@
         if (this.typing == this.word) {
           this.typing = ''
           this.$socket.emit('sendAttack', { username: this.username })
-          let soundEffect = new Audio(sound)
-          soundEffect.play()
         } else {
           this.typing = ''
         }
+      },
+
+      attack() {
+        let soundIndex = Math.floor(Math.random() * this.sound.attack.length)
+        let sound = this.sound.attack[soundIndex]
+        let sfx = new Audio(sound)
+        sfx.volume = 0.25
+
+        sfx.play()
+      },
+
+      randomAttack() {
+        if (Math.random() > 0.5) this.attack()
       },
     },
     computed: {
@@ -110,6 +128,8 @@
         this.word = word
         // kosongkan typing setiap menerima soal baru
         this.typing = ''
+
+        this.attack()
       },
       playerStatus(playerStatus) {
         // Kalo di server ga ada pemain, kosongkan localstorage, kembali ke login
@@ -162,7 +182,7 @@
 
       // play background music
       let newBgm = new Audio(backSound)
-      newBgm.volume = 0.45
+      newBgm.volume = 0.25
       // bgm.play()
       this.$store.dispatch('setBgm', newBgm)
     },
