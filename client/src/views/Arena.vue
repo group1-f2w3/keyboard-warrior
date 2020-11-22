@@ -27,7 +27,6 @@
         </div>
         <!-- <div class="row">-->
         <!-- Buat characterr -->
-        <!-- <h5 class="display-4 mb-5 ml-5" id="current-word">{{$store.state.currentWord}}</h5> -->
         <div class="row d-flex mt-5">
           <img :src="knight" width="50%" alt="" srcset="" />
           <img
@@ -67,6 +66,8 @@
 <script>
   import knight from '@/assets/knight-a-idle.gif'
   import knightEnemy from '@/assets/knight-b-idle.gif'
+  import sound from '@/audio/steelsword.mp3'
+  import backSound from '@/audio/09_-_00_-_Return_to_Prontera.mp3'
   export default {
     name: 'Arena',
     data() {
@@ -85,16 +86,8 @@
     methods: {
       matchWords() {
         if (this.typing == this.word) {
-          // this.$store.dispatch('fetchWords')
-          // this.$socket.emit('fetchWords')
           this.typing = ''
-          let damage = this.word.length
-          this.$socket.emit('sendAttack', { username: this.username, damage })
-
-          // let dps = {
-          //   username: localStorage.getItem('username'),
-          //   damage: +this.damage,
-          // }
+          this.$socket.emit('sendAttack', { username: this.username })
         } else {
           this.typing = ''
         }
@@ -108,7 +101,6 @@
         this.typing = ''
       },
       playerStatus(playerStatus) {
-        // this.hp = localStorage.getItem('hp')
         if (playerStatus.length === 0) {
           localStorage.clear()
           this.$router.replace('/welcome')
@@ -141,26 +133,8 @@
         // this.$router.push('/result')
         this.$router.push('/win')
       },
-      // sendAttack(damages) {
-      //   this.damages = damages
-      //   let sender
-      //   let hit = 0
-      //   for (let i = 0; i < this.damages.length; i++) {
-      //     hit = Number(this.damages[this.damages.length - 1].damage)
-      //     sender = this.damages[i].username
-      //   }
-      //   let healthbar = localStorage.getItem('hp')
-      //   if (sender !== this.username) {
-      //     healthbar -= hit
-      //   }
-      //   localStorage.setItem('hp', healthbar)
-      //   this.sisaHp = localStorage.getItem('hp')
-
-      //   console.log(hit, healthbar, 'tes client')
-      // },
     },
     created() {
-      // this.$store.dispatch('fetchWords')
       console.log('created')
       this.$socket.emit('playerStatus')
       this.$socket.emit('fetchWord')
