@@ -60,14 +60,16 @@
       </h1>
     </div>
     <!-- </div> -->
+    <audio :src="bgm" id="bgm" class="hidden" preload="none"></audio>
   </section>
 </template>
 
 <script>
   import knight from '@/assets/knight-a-idle.gif'
   import knightEnemy from '@/assets/knight-b-idle.gif'
-  import sound from '@/audio/steelsword.mp3'
-  import backSound from '@/audio/09_-_00_-_Return_to_Prontera.mp3'
+  import sword1 from '@/audio/steelsword.mp3'
+  import sword2 from '@/audio/sword1.mp3'
+  import backSound from '../audio/makai_symphony-dragon_castle-96kbps.mp3'
   export default {
     name: 'Arena',
     data() {
@@ -81,6 +83,7 @@
         username: '',
         knight,
         knightEnemy,
+        bgm: '',
       }
     },
     methods: {
@@ -88,6 +91,8 @@
         if (this.typing == this.word) {
           this.typing = ''
           this.$socket.emit('sendAttack', { username: this.username })
+          let soundEffect = new Audio(sound)
+          soundEffect.play()
         } else {
           this.typing = ''
         }
@@ -121,6 +126,10 @@
       finish(playerStatus) {
         this.playerStatus = playerStatus
         localStorage.removeItem('username')
+
+        this.bgm.pause()
+        this.bgm.currentTime = 0
+
         // playerStatus.forEach((player) => {
         //   if (player.username === this.username) {
         //     if (player.hp <= 0) {
@@ -141,6 +150,12 @@
       this.username = localStorage.getItem('username')
       // console.log(localStorage.getItem('username'))
       console.log(this.username)
+
+      // play background music
+      this.bgm = new Audio(backSound)
+      this.bgm.volume = 0.45
+      this.bgm.play()
+      console.log(this.bgm.volume)
     },
     mounted() {
       if (this.playerStatus.length === 0) {
