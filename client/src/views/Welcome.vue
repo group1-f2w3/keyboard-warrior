@@ -32,6 +32,7 @@
 <script>
   import mainLogo from '@/assets/main-logo.png'
   import typeLogo from '@/assets/type-logo.png'
+  import bgm1 from '../audio/viking_war_music-96kbps.mp3'
   // export default {
   //   name: 'Welcome',
   //   data() {
@@ -48,12 +49,14 @@
         mainLogo,
         typeLogo,
         username: '',
-        // hp: 100,
         fullArena: false,
+        bgm: '',
       }
     },
     sockets: {
       enterArena() {
+        this.bgm.pause()
+        this.bgm.currentTime = 0
         console.log('enter arena')
         this.fullArena = false
         console.log('username:', this.username)
@@ -70,6 +73,10 @@
         // localStorage.setItem('hp', this.hp)
         this.$socket.emit('userLogin', { username: this.username })
       },
+    },
+    mounted() {
+      this.bgm = new Audio(bgm1)
+      this.bgm.play()
     },
   }
 </script>
