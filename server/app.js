@@ -19,6 +19,9 @@ let isPlaying = false
 let words = require('./kamus')
 
 function sendNewWord() {
+  if (playerStatus.length === 2) {
+    isPlaying = true
+  }
   if (isPlaying) {
     let randomIndex = Math.floor(Math.random() * words.length)
     newWord = words[randomIndex]
