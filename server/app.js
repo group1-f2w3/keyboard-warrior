@@ -13,14 +13,18 @@ app.use(express.urlencoded({ extended: false }))
 let rooms = []
 let playerStatus = []
 let maxHp = 50
+let newWord = ''
+let isPlaying = false
 
 let words = require('./kamus')
 
-function fetchWord() {
-  let randomIndex = Math.floor(Math.random() * words.length)
-  let word = words[randomIndex]
-  console.log({ word })
-  return word
+function sendNewWord() {
+  if (isPlaying) {
+    let randomIndex = Math.floor(Math.random() * words.length)
+    newWord = words[randomIndex]
+    console.log('sending new word:', newWord)
+    io.emit('fetchWord', newWord)
+  }
 }
 
 io.on('connection', (socket) => {
@@ -37,10 +41,40 @@ io.on('connection', (socket) => {
   // })
 
   socket.on('fetchWord', () => {
-    let word = fetchWord()
-    console.log('sending new word:', word)
-    io.emit('fetchWord', word)
+    sendNewWord()
   })
+
+  socket.on('playerStatus', () => {
+    io.emit('playerStatus', playerStatus)
+  })
+
+  socket.on('sendAttack', (data) => {
+    playerStatus.forEach((player) => {
+      if (player.username !== data.username) {
+        // player.hp = player.hp - data.damage
+        console.log('send attack:', { newWord, length: newWord.length })
+        player.hp = player.hp - newWord.length
+      }
+    })
+
+    playerStatus.forEach((player) => {
+      if (player.hp <= 0) {
+        isPlaying = false
+        player.hp = 0
+
+        // kosongkan data player
+        playerStatus = []
+
+        io.emit('finish', playerStatus)
+      }
+    })
+    io.emit('playerStatus', playerStatus)
+
+    sendNewWord()
+    // damages.push(dps)
+    // io.emit('sendAttack', damages)
+  })
+
   socket.on('getRooms', () => {
     socket.emit('getRooms', rooms)
   })
@@ -101,40 +135,12 @@ io.on('connection', (socket) => {
       console.log(playerStatus.length)
       io.emit('fullArena')
     } else {
-      playerStatus.push({ username, hp: 50, maxHp })
+      playerStatus.push({ username, hp: maxHp, maxHp })
 
       socket.emit('enterArena')
       //broadcasting playerinfo
       io.emit('playerStatus', playerStatus)
     }
-  })
-
-  socket.on('playerStatus', () => {
-    io.emit('playerStatus', playerStatus)
-  })
-
-  socket.on('sendAttack', (data) => {
-    playerStatus.forEach((player) => {
-      if (player.username !== data.username) {
-        player.hp = player.hp - data.damage
-      }
-    })
-
-    playerStatus.forEach((player) => {
-      if (player.hp <= 0) {
-        player.hp = 0
-        playerStatus = []
-        io.emit('finish', playerStatus)
-      } else {
-        io.emit('playerStatus', playerStatus)
-        let word = fetchWord()
-        console.log('sending new word:', word)
-        io.emit('fetchWord', word)
-      }
-    })
-
-    // damages.push(dps)
-    // io.emit('sendAttack', damages)
   })
 })
 console.log(playerStatus)
