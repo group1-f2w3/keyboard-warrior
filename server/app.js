@@ -43,6 +43,24 @@ io.on('connection', (socket) => {
   //   socket.emit('getRooms', rooms)
   // })
 
+  socket.on('userLogin', ({ username }) => {
+    if (playerStatus.length === 2) {
+      console.log(playerStatus)
+      console.log(playerStatus.length)
+      io.emit('fullArena')
+    } else {
+      playerStatus.push({ username, hp: maxHp, maxHp })
+
+      socket.emit('enterArena')
+      //broadcasting playerinfo
+      io.emit('playerStatus', playerStatus)
+    }
+
+    if (playerStatus.length === 2) {
+      io.emit('isPlaying', true)
+    }
+  })
+
   socket.on('fetchWord', () => {
     sendNewWord()
   })
@@ -74,9 +92,11 @@ io.on('connection', (socket) => {
     io.emit('playerStatus', playerStatus)
 
     sendNewWord()
-    // damages.push(dps)
-    // io.emit('sendAttack', damages)
   })
+
+  //
+  // ─── ROOMS ──────────────────────────────────────────────────────────────────────
+  //
 
   socket.on('getRooms', () => {
     socket.emit('getRooms', rooms)
@@ -130,20 +150,6 @@ io.on('connection', (socket) => {
     // kirim event agar semua pemain selain admin untuk mulai main game
     socket.broadcast.to(roomName).emit('startGame')
     //
-  })
-
-  socket.on('userLogin', ({ username }) => {
-    if (playerStatus.length > 1) {
-      console.log(playerStatus)
-      console.log(playerStatus.length)
-      io.emit('fullArena')
-    } else {
-      playerStatus.push({ username, hp: maxHp, maxHp })
-
-      socket.emit('enterArena')
-      //broadcasting playerinfo
-      io.emit('playerStatus', playerStatus)
-    }
   })
 })
 console.log(playerStatus)

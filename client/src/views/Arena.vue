@@ -40,14 +40,14 @@
       </div>
     </div>
 
-    <div id="input-container">
+    <div v-if="isPlaying" id="input-container">
       <div id="word">
         <h1>{{ word }}</h1>
       </div>
 
       <!-- TYPE CONTAINER -->
       <!-- <div id="input" class="card card-type p-3 mt-3"> -->
-      <h1 class="display-5 ">
+      <h1 v-if="isPlaying" class="display-5 ">
         <input
           type="text"
           v-model="typing"
@@ -60,7 +60,6 @@
       </h1>
     </div>
     <!-- </div> -->
-    <audio :src="bgm" id="bgm" class="hidden" preload="none"></audio>
   </section>
 </template>
 
@@ -76,14 +75,12 @@
       return {
         word: '',
         typing: '',
-        // damage: 0,
         playerStatus: [],
         hp1: '',
         hp2: '',
         username: '',
         knight,
         knightEnemy,
-        bgm: '',
       }
     },
     methods: {
@@ -98,7 +95,16 @@
         }
       },
     },
+    computed: {
+      isPlaying() {
+        return this.$store.state.isPlaying
+      },
+    },
     sockets: {
+      isPlaying(payload) {
+        this.$store.dispatch('setIsPlaying', payload)
+      },
+
       fetchWord(word) {
         console.log('receiving new word:', word)
         this.word = word
@@ -106,6 +112,7 @@
         this.typing = ''
       },
       playerStatus(playerStatus) {
+        // Kalo di server ga ada pemain, kosongkan localstorage, kembali ke login
         if (playerStatus.length === 0) {
           localStorage.clear()
           this.$router.replace('/welcome')
@@ -127,8 +134,10 @@
         this.playerStatus = playerStatus
         localStorage.removeItem('username')
 
-        this.bgm.pause()
-        this.bgm.currentTime = 0
+        this.$store.dispatch('stopBgm')
+
+        // this.bgm.pause()
+        // this.bgm.currentTime = 0
 
         // playerStatus.forEach((player) => {
         //   if (player.username === this.username) {
@@ -152,16 +161,15 @@
       console.log(this.username)
 
       // play background music
-      this.bgm = new Audio(backSound)
-      this.bgm.volume = 0.45
-      this.bgm.play()
-      console.log(this.bgm.volume)
+      let newBgm = new Audio(backSound)
+      newBgm.volume = 0.45
+      // bgm.play()
+      this.$store.dispatch('setBgm', newBgm)
     },
     mounted() {
-      if (this.playerStatus.length === 0) {
-        localStorage.removeItem('username')
-        // this.$router.push('/welcome')
-      }
+      // if (this.playerStatus.length === 0) {
+      //   localStorage.removeItem('username')
+      // }
     },
   }
 </script>

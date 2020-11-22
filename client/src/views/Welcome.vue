@@ -55,12 +55,16 @@
     },
     sockets: {
       enterArena() {
-        this.bgm.pause()
-        this.bgm.currentTime = 0
+        // this.bgm.pause()
+        // this.bgm.currentTime = 0
+        this.$store.dispatch('stopBgm')
         console.log('enter arena')
+
         this.fullArena = false
         console.log('username:', this.username)
+
         localStorage.setItem('username', this.username)
+
         this.$router.push({ name: 'Arena' })
       },
 
@@ -75,8 +79,10 @@
       },
     },
     mounted() {
-      this.bgm = new Audio(bgm1)
-      this.bgm.play()
+      // this.bgm = new Audio(bgm1)
+      // this.bgm.play()
+      let bgm = new Audio(bgm1)
+      this.$store.dispatch('setBgm', bgm)
     },
   }
 </script>
