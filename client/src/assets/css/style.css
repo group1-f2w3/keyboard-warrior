@@ -6,7 +6,7 @@
 body {
   background-color: #747474;
   /* padding: 10px; */
-  height: 100vh
+  height: 100vh;
 }
 body .welcome-page {
   display: flex;
@@ -62,7 +62,7 @@ body .arena-page .card-arena #myProgress1 {
 body .arena-page .card-arena #myBar1 {
   width: 90%;
   height: 30px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 body .arena-page .card-arena #myProgress2 {
   width: 100%;
@@ -106,10 +106,13 @@ body .winner-page .card-winner .btn-section .btn-danger {
   margin-left: 10px;
 }
 body .loser-page {
-  margin-top: 50px;
+  /* margin-top: 50px; */
+  height: 100vh;
   display: flex;
   justify-content: center;
   text-align: center;
+  background-image: url(../lose.jpg);
+  background-size: cover;
 }
 body .loser-page .card-loser {
   width: 490px;

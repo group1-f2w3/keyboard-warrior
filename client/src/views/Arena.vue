@@ -12,20 +12,19 @@
         <div class="row">
           <div v-if="playerStatus.length > 0" class="col-5">
             <h3 class="text-white">{{ playerStatus[0].username }}</h3>
-            <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
+
             <div id="myProgress1">
               <div id="myBar1" :style="hp1"></div>
             </div>
           </div>
           <div v-if="playerStatus.length === 2" class="col-5">
             <h3 class="text-white">{{ playerStatus[1].username }}</h3>
-            <!-- <h3 class="text-white">{{ playerStatus }}</h3> -->
+
             <div id="myProgress2">
               <div id="myBar2" :style="hp2"></div>
             </div>
           </div>
         </div>
-        <!-- <div class="row">-->
         <!-- Buat characterr -->
         <div class="row d-flex mt-5">
           <img :src="knight1" width="50%" alt="" srcset="" />
@@ -40,19 +39,19 @@
       </div>
     </div>
 
-    <div v-if="playerStatus.length === 2" id="input-container">
+    <div v-if="isPlaying" id="input-container">
       <div id="word">
         <h1>{{ word }}</h1>
       </div>
 
       <!-- TYPE CONTAINER -->
       <!-- <div id="input" class="card card-type p-3 mt-3"> -->
-      <h1 v-if="playerStatus.length === 2" class="display-5 ">
+      <h1 v-if="isPlaying" class="display-5 ">
         <input
           type="text"
           v-model="typing"
           v-on:keyup.enter="matchWords"
-          @input="randomAttack"
+          @input="sendAttack"
           class="form-control form-control-lg"
           placeholder="Type To Attack.."
           id="word-input"
@@ -65,11 +64,9 @@
 </template>
 
 <script>
-  import knight1 from '@/assets/knight-a-idle.gif'
-  import knight2 from '@/assets/knight-b-idle.gif'
   import sword1 from '@/audio/steelsword.mp3'
   import sword2 from '@/audio/sword1.mp3'
-  import backSound from '../audio/makai_symphony-dragon_castle-96kbps.mp3'
+  import bgmArena from '../audio/makai_symphony-dragon_castle-96kbps.mp3'
   import sfxSword1 from '../audio/steelsword.mp3'
   import sfxSword2 from '../audio/sword1.mp3'
   import animKnight1Attack from '../assets/knight-attack.gif'
@@ -120,29 +117,99 @@
       matchWords() {
         if (this.typing == this.word) {
           this.typing = ''
-          this.$socket.emit('sendAttack', { username: this.username })
+          this.$socket.emit('submitAnswer', { username: this.username })
         } else {
           this.typing = ''
         }
       },
 
-      attack() {
-        this.knight1 = this.animation.knight1.attack
-        this.knight2 = this.animation.knight2.attack
+      sendAttack() {
+        this.$socket.emit('sendAttack', {
+          username: localStorage.getItem('username'),
+        })
+      },
+
+      attack(username, randomSound = false) {
+        if (this.playerStatus[0].username === username) {
+          if (this.knight1 == this.animation.knight1.idle) {
+            this.knight1 = this.animation.knight1.attack
+            setTimeout(() => {
+              this.knight1 = this.animation.knight1.idle
+            }, 3000)
+          }
+        } else {
+          if (this.knight2 == this.animation.knight2.idle) {
+            this.knight2 = this.animation.knight2.attack
+            setTimeout(() => {
+              this.knight2 = this.animation.knight2.idle
+            }, 2000)
+          }
+        }
 
         let soundIndex = Math.floor(Math.random() * this.sound.attack.length)
         let sound = this.sound.attack[soundIndex]
         let sfx = new Audio(sound)
         sfx.volume = 0.3
 
-        sfx.play()
+        if (randomSound) {
+          if (Math.random() > 0.5) {
+            sfx.play()
+          }
+        } else {
+          sfx.play()
+        }
       },
 
-      randomAttack() {
-        if (Math.random() > 0.5) {
-          this.knight1 = this.animation.knight1.attack
-          this.knight2 = this.animation.knight2.attack
-          this.attack()
+      hurt(username) {
+        if (this.playerStatus[0].username === username) {
+          if (this.knight1 != this.animation.knight1.hurt) {
+            this.knight1 = this.animation.knight1.hurt
+            setTimeout(() => {
+              this.knight1 = this.animation.knight1.idle
+            }, 2000)
+          }
+        } else {
+          if (this.knight2 != this.animation.knight2.hurt) {
+            this.knight2 = this.animation.knight2.hurt
+            setTimeout(() => {
+              this.knight2 = this.animation.knight2.idle
+            }, 2000)
+          }
+        }
+      },
+      lose(username) {
+        if (this.playerStatus[0].username === username) {
+          // update health bar
+          this.hp1 = 'width: 0'
+          // update animation
+          if (this.knight1 != this.animation.knight1.lose) {
+            this.knight1 = this.animation.knight1.lose
+          }
+        } else {
+          this.hp2 = 'width: 100%'
+          if (this.knight2 != this.animation.knight2.lose) {
+            this.knight2 = this.animation.knight2.lose
+          }
+        }
+        if (localStorage.getItem('username') === username) {
+          console.log('You lose')
+          this.$router.push('/lose')
+        }
+      },
+      win(username) {
+        if (this.playerStatus[0].username === username) {
+          if (this.knight1 != this.animation.knight1.win) {
+            this.knight1 = this.animation.knight1.win
+          }
+        } else {
+          if (this.knight2 != this.animation.knight2.win) {
+            this.knight2 = this.animation.knight2.win
+          }
+        }
+
+        if (localStorage.getItem('username') === username) {
+          console.log('You win')
+          this.$router.push('/win')
         }
       },
     },
@@ -153,7 +220,44 @@
     },
     sockets: {
       isPlaying(payload) {
+        console.log('isplaying:', payload)
         this.$store.dispatch('setIsPlaying', payload)
+        if (payload === false) {
+          this.$store.dispatch('stopBgm')
+        }
+      },
+
+      updateAnimation({ username, animation }) {
+        switch (animation) {
+          case 'attack':
+            this.attack(username)
+            break
+          case 'hurt':
+            this.hurt(username)
+            break
+          case 'win':
+            this.win(username)
+            break
+          case 'lose':
+            this.lose(username)
+            break
+        }
+      },
+
+      attack() {
+        this.attack()
+      },
+
+      hurt() {
+        this.hurt()
+      },
+
+      win() {
+        this.win()
+      },
+
+      lose() {
+        this.lose()
       },
 
       fetchWord(word) {
@@ -161,20 +265,16 @@
         this.word = word
         // kosongkan typing setiap menerima soal baru
         this.typing = ''
-
-        if (
-          this.playerStatus[0].hp != this.playerStatus[0].maxHp &&
-          this.playerStatus[1].hp != this.playerStatus[1].maxHp
-        ) {
-          this.attack()
-        }
       },
       playerStatus(playerStatus) {
-        // Kalo di server ga ada pemain, kosongkan localstorage, kembali ke login
+        // Kalo di server ga ada pemain, kosongkan localStorage, kembali ke login
         if (playerStatus.length === 0) {
+          console.log('no player in the arena')
           localStorage.clear()
           this.$router.replace('/welcome')
         }
+
+        // update health bar
         this.playerStatus = playerStatus
         if (this.playerStatus[0]) {
           let hp1 = (100 * this.playerStatus[0].hp) / this.playerStatus[0].maxHp
@@ -189,6 +289,7 @@
       },
 
       finish(playerStatus) {
+        console.log('finish')
         this.playerStatus = playerStatus
         localStorage.removeItem('username')
 
@@ -215,22 +316,12 @@
       this.$socket.emit('playerStatus')
       this.$socket.emit('fetchWord')
       this.username = localStorage.getItem('username')
-      // console.log(localStorage.getItem('username'))
       console.log(this.username)
 
-      // this.knight1 = this.animation.knight1.idle
-      // this.knight2 = this.animation.knight2.idle
-
       // play background music
-      let newBgm = new Audio(backSound)
+      let newBgm = new Audio(bgmArena)
       newBgm.volume = 0.15
-      // bgm.play()
       this.$store.dispatch('setBgm', newBgm)
-    },
-    mounted() {
-      // if (this.playerStatus.length === 0) {
-      //   localStorage.removeItem('username')
-      // }
     },
   }
 </script>

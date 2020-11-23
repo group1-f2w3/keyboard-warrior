@@ -5,8 +5,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentWord: [],
-    score: 0,
     isPlaying: false,
     winner: '',
     bgm: '',

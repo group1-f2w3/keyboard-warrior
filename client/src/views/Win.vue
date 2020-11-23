@@ -1,5 +1,5 @@
 <template>
-  <section class="winner-page loser-page">
+  <section class="winner-page">
     <WinnerCard />
   </section>
 </template>
@@ -15,7 +15,7 @@
     },
     components: {
       WinnerCard,
-    }
+    },
   }
 </script>
 

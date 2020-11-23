@@ -21,6 +21,7 @@ let words = require('./kamus')
 function sendNewWord() {
   if (playerStatus.length === 2) {
     isPlaying = true
+    io.emit('isPlaying', true)
   }
   if (isPlaying) {
     let randomIndex = Math.floor(Math.random() * words.length)
@@ -49,7 +50,7 @@ io.on('connection', (socket) => {
       console.log(playerStatus.length)
       io.emit('fullArena')
     } else {
-      playerStatus.push({ username, hp: maxHp, maxHp })
+      playerStatus.push({ username, hp: maxHp, prevHp: maxHp, maxHp })
 
       socket.emit('enterArena')
       //broadcasting playerinfo
@@ -69,12 +70,18 @@ io.on('connection', (socket) => {
     io.emit('playerStatus', playerStatus)
   })
 
-  socket.on('sendAttack', (data) => {
+  socket.on('submitAnswer', (data) => {
+    io.emit('updateAnimation', { username: data.username, animation: 'attack' })
     playerStatus.forEach((player) => {
       if (player.username !== data.username) {
-        // player.hp = player.hp - data.damage
         console.log('send attack:', { newWord, length: newWord.length })
+        player.prevHp = player.hp
         player.hp = player.hp - newWord.length
+
+        io.emit('updateAnimation', {
+          username: player.username,
+          animation: 'hurt',
+        })
       }
     })
 
@@ -83,15 +90,30 @@ io.on('connection', (socket) => {
         isPlaying = false
         player.hp = 0
 
+        io.emit('updateAnimation', {
+          username: player.username,
+          animation: 'lose',
+        })
+        io.emit('updateAnimation', {
+          username: data.username,
+          animation: 'win',
+        })
+
         // kosongkan data player
         playerStatus = []
-
-        io.emit('finish', playerStatus)
+        io.emit('isPlaying', false)
       }
     })
-    io.emit('playerStatus', playerStatus)
 
-    sendNewWord()
+    if (isPlaying) {
+      io.emit('playerStatus', playerStatus)
+
+      sendNewWord()
+    }
+  })
+
+  socket.on('sendAttack', ({ username }) => {
+    io.emit('updateAnimation', { username, animation: 'attack' })
   })
 
   //
@@ -125,7 +147,7 @@ io.on('connection', (socket) => {
   //   io.emit('userLogin', {onlineUsers,playerStatus});
   // });
 
-  // socket.on('sendAttack', ({ attack, damage }) => {
+  // socket.on('submitAnswer', ({ attack, damage }) => {
   //   playerStatus.forEach((elemen) => {
   //     if (elemen.username !== attack.username) {
   //       //memberikan damage kepada lawan
@@ -133,7 +155,7 @@ io.on('connection', (socket) => {
   //     }
   //   })
   //   console.log(damage, 'server')
-  //   io.emit('sendAttack', playerStatus)
+  //   io.emit('submitAnswer', playerStatus)
   // })
 
   socket.on('joinRoom', (data) => {
