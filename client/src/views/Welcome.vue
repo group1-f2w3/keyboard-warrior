@@ -82,6 +82,7 @@
       // this.bgm = new Audio(bgm1)
       // this.bgm.play()
       let bgm = new Audio(bgm1)
+      bgm.volume = 0.25
       this.$store.dispatch('setBgm', bgm)
     },
   }

@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     isPlaying: false,
     winner: '',
+    loser: '',
     bgm: '',
   },
   mutations: {
@@ -24,8 +25,29 @@ export default new Vuex.Store({
     },
 
     STOP_BGM(state) {
-      state.bgm.pause()
-      state.bgm.currentTime = 0
+      fadeoutBgm()
+
+      function fadeoutBgm() {
+        let fadeOutDuration = 3000
+        let updateFreq = 200
+        let currentVolume = state.bgm.volume
+        let interval = currentVolume / (fadeOutDuration / updateFreq)
+
+        let ref = setInterval(fadeout, updateFreq)
+        function fadeout() {
+          if (state.bgm.volume - interval <= 0) {
+            clearInterval(ref)
+            state.bgm.pause()
+            state.bgm.currentTime = 0
+          } else {
+            state.bgm.volume = state.bgm.volume - interval
+          }
+        }
+      }
+    },
+    SET_RESULT(state, payload) {
+      state.winner = payload.winner
+      state.loser = payload.loser
     },
   },
   actions: {
@@ -38,6 +60,9 @@ export default new Vuex.Store({
     },
     setIsPlaying({ commit }, payload) {
       commit('SET_IS_PLAYING', payload)
+    },
+    setResult({ commit }, payload) {
+      commit('SET_RESULT', payload)
     },
   },
   modules: {},

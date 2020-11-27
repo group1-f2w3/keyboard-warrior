@@ -2,7 +2,7 @@
   <div class="card card-loser">
     <div class="card-body">
       <img :src="medal" width="170px" class="mr-1 mb-3 trophy" alt="" />
-      <h3 class="text-result">You lose, train harder!</h3>
+      <h3 class="text-result">{{ loser }} you lose, train harder!</h3>
       <!-- <p class="text-result">Username</p> -->
       <div class="btn-section">
         <button class="btn btn-success" @click="gotoLogin">Play Again</button>
@@ -20,6 +20,11 @@
       return {
         medal,
       }
+    },
+    computed: {
+      loser() {
+        return this.$store.state.loser
+      },
     },
     methods: {
       gotoLogin() {

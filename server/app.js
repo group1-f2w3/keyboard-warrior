@@ -34,6 +34,8 @@ function sendNewWord() {
 io.on('connection', (socket) => {
   console.log('a user connected')
 
+  io.emit('logout')
+
   //user login
   // socket.on('userLogin', (username) => {
   //   // playerStatus.push({
@@ -71,6 +73,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on('submitAnswer', (data) => {
+    let winner
+    let loser
+
     io.emit('updateAnimation', { username: data.username, animation: 'attack' })
     playerStatus.forEach((player) => {
       if (player.username !== data.username) {
@@ -89,6 +94,7 @@ io.on('connection', (socket) => {
       if (player.hp <= 0) {
         isPlaying = false
         player.hp = 0
+        loser = player.username
 
         io.emit('updateAnimation', {
           username: player.username,
@@ -98,10 +104,8 @@ io.on('connection', (socket) => {
           username: data.username,
           animation: 'win',
         })
-
-        // kosongkan data player
-        playerStatus = []
-        io.emit('isPlaying', false)
+      } else {
+        winner = player.username
       }
     })
 
@@ -109,6 +113,12 @@ io.on('connection', (socket) => {
       io.emit('playerStatus', playerStatus)
 
       sendNewWord()
+    } else {
+      // Udah ada yang mati
+      io.emit('finish', { winner, loser })
+
+      // kosongkan data player
+      playerStatus = []
     }
   })
 
