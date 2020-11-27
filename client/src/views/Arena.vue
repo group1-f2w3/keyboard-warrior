@@ -157,7 +157,7 @@
         let soundIndex = Math.floor(Math.random() * this.sound.attack.length)
         let sound = this.sound.attack[soundIndex]
         let sfx = new Audio(sound)
-        sfx.volume = 0.1
+        sfx.volume = 0.25
 
         if (randomSound) {
           if (Math.random() > 0.5) {
@@ -352,6 +352,7 @@
 
       let sound = this.sound.attack[0]
       let sfx = new Audio(sound)
+      sfx.volume = 0.25
       sfx.play()
 
       // play background music
