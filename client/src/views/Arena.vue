@@ -233,14 +233,14 @@
         }
       },
     },
-    watch: {
-      knight1() {
-        console.log(this.knight1, '<<< knight1 anim')
-      },
-      knight2() {
-        console.log(this.knight2, '<<< knight2 anim')
-      },
-    },
+    // watch: {
+    //   knight1() {
+    //     console.log(this.knight1, '<<< knight1 anim')
+    //   },
+    //   knight2() {
+    //     console.log(this.knight2, '<<< knight2 anim')
+    //   },
+    // },
     computed: {
       currentVolume() {
         return this.$store.state.bgm.volume
