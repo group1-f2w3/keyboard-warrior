@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }))
 
 let rooms = []
 let playerStatus = []
-let maxHp = 50
+let maxHp = 100
 let newWord = ''
 let isPlaying = false
 
